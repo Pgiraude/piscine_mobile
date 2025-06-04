@@ -1,8 +1,9 @@
-import { useLocalSearchParams } from "expo-router";
+import { useSearch } from "@/context/SearchContext";
+
 import { Text, View } from "react-native";
 
 const Index = () => {
-  const { searchText } = useLocalSearchParams();
+  const { searchText } = useSearch();
 
   return (
     <View

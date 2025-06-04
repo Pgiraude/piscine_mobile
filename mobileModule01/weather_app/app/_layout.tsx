@@ -2,22 +2,22 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
-import { Tabs, useRouter } from "expo-router";
-import { Pressable, TextInput, View } from "react-native";
+import { Tabs } from "expo-router";
+import { Platform, Pressable, StatusBar, TextInput, View } from "react-native";
 import { useState } from "react";
+import { SearchProvider, useSearch } from "@/context/SearchContext";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function RootLayout() {
-  const router = useRouter();
+function TabsLayout() {
   const [searchTextLocal, setSearchTextLocal] = useState("");
+  const { setSearchText } = useSearch();
 
   const handleGeolocation = () => {
-    console.log("Geolocation");
-    router.setParams({ searchText: "Geolocation" });
+    setSearchText("Geolocation");
   };
 
   const handleSearch = () => {
-    console.log("Search");
-    router.setParams({ searchText: searchTextLocal });
+    setSearchText(searchTextLocal);
     setSearchTextLocal("");
   };
 
@@ -25,44 +25,46 @@ export default function RootLayout() {
     <Tabs
       screenOptions={{
         header: () => (
-          <View
-            style={{
-              flexDirection: "row",
-              padding: 10,
-              backgroundColor: "white",
-              borderBottomWidth: 1,
-              borderBottomColor: "#ccc",
-            }}
-          >
-            <TextInput
+          <SafeAreaView>
+            <View
               style={{
-                flex: 1,
-                height: 40,
-                borderWidth: 1,
-                borderColor: "#ccc",
-                borderRadius: 5,
-                paddingHorizontal: 10,
-                marginRight: 10,
-              }}
-              placeholder="Rechercher une ville..."
-              value={searchTextLocal}
-              onChangeText={setSearchTextLocal}
-              onSubmitEditing={handleSearch}
-            />
-            <Pressable
-              onPress={handleGeolocation}
-              style={{
-                width: 40,
-                height: 40,
-                backgroundColor: "#007AFF",
-                borderRadius: 5,
-                justifyContent: "center",
-                alignItems: "center",
+                flexDirection: "row",
+                padding: 10,
+                backgroundColor: "white",
+                borderBottomWidth: 1,
+                borderBottomColor: "#ccc",
               }}
             >
-              <MaterialIcons name="my-location" size={24} color="white" />
-            </Pressable>
-          </View>
+              <TextInput
+                style={{
+                  flex: 1,
+                  height: 40,
+                  borderWidth: 1,
+                  borderColor: "#ccc",
+                  borderRadius: 5,
+                  paddingHorizontal: 10,
+                  marginRight: 10,
+                }}
+                placeholder="Rechercher une ville..."
+                value={searchTextLocal}
+                onChangeText={setSearchTextLocal}
+                onSubmitEditing={handleSearch}
+              />
+              <Pressable
+                onPress={handleGeolocation}
+                style={{
+                  width: 40,
+                  height: 40,
+                  backgroundColor: "#007AFF",
+                  borderRadius: 5,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <MaterialIcons name="my-location" size={24} color="white" />
+              </Pressable>
+            </View>
+          </SafeAreaView>
         ),
       }}
     >
@@ -102,5 +104,13 @@ export default function RootLayout() {
         }}
       />
     </Tabs>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <SearchProvider>
+      <TabsLayout />
+    </SearchProvider>
   );
 }
