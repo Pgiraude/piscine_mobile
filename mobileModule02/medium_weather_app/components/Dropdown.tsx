@@ -1,4 +1,4 @@
-import { City } from "@/hooks/useCityAutocomplete";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import {
   FlatList,
@@ -7,29 +7,46 @@ import {
   View,
   Text,
   StyleSheet,
+  TouchableWithoutFeedback,
 } from "react-native";
-import useCityAutocomplete from "@/hooks/useCityAutocomplete";
+import useGetCities from "@/hooks/useGetCities";
 import useStore from "@/store/useStore";
+import { City, CityInfosStatusEnum } from "@/type/city.type";
 
 const Dropdown = () => {
   const setCityInfos = useStore((state) => state.setCityInfos);
-  const setIsGeoError = useStore((state) => state.setIsGeoError);
 
-  const { results, fetchCities } = useCityAutocomplete();
+  const { results, fetchCities, error } = useGetCities();
 
-  const [searchText, setSearchTextLocal] = useState("");
+  const [searchText, setSearchText] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
 
+  useEffect(() => {
+    if (error) {
+      setCityInfos({ data: undefined, status: CityInfosStatusEnum.API_ERROR });
+    }
+  }, [error]);
+
   const handleChangeText = (text: string) => {
-    setSearchTextLocal(text);
+    setSearchText(text);
     setShowDropdown(true);
     if (text) fetchCities(text);
   };
 
   const onOptionPress = (option: City) => {
-    setIsGeoError(false);
-    setCityInfos(option);
-    setSearchTextLocal("");
+    setCityInfos({ data: option, status: CityInfosStatusEnum.SUCCESS });
+    setSearchText("");
+    setShowDropdown(false);
+  };
+
+  const handleSubmit = () => {
+    if (results && results.length > 0) {
+      setCityInfos({ data: results[0], status: CityInfosStatusEnum.SUCCESS });
+    } else {
+      console.log("not found");
+      setCityInfos({ data: undefined, status: CityInfosStatusEnum.NOT_FOUND });
+    }
+    setSearchText("");
     setShowDropdown(false);
   };
 
@@ -41,22 +58,31 @@ const Dropdown = () => {
         onChangeText={handleChangeText}
         placeholder="Search..."
         onBlur={() => setShowDropdown(false)}
+        onSubmitEditing={handleSubmit}
       />
-      {showDropdown && results && results.length > 0 && (
-        <View style={styles.dropdown}>
-          <FlatList
-            data={results}
-            renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => onOptionPress(item)}>
-                <Text style={styles.item}>
-                  {item.name} {item.admin1}, {item.country}
-                </Text>
-              </TouchableOpacity>
-            )}
-            keyExtractor={(item) => item.id.toString()}
-            keyboardShouldPersistTaps="handled"
-          />
-        </View>
+      {showDropdown && (
+        <>
+          <TouchableWithoutFeedback onPress={() => setShowDropdown(false)}>
+            <View style={styles.overlay} />
+          </TouchableWithoutFeedback>
+          {results && results.length > 0 && (
+            <View style={styles.dropdown}>
+              <FlatList
+                data={results}
+                renderItem={({ item }) => (
+                  <TouchableOpacity onPress={() => onOptionPress(item)}>
+                    <Text style={styles.item}>
+                      {item.name} {item.admin1}, {item.country}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item) => item.id.toString()}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={true}
+              />
+            </View>
+          )}
+        </>
       )}
     </View>
   );
@@ -71,6 +97,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     backgroundColor: "white",
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 999,
   },
   dropdown: {
     position: "absolute",

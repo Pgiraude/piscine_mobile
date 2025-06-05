@@ -1,63 +1,52 @@
-import { Text, View } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import useStore from "@/store/useStore";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import useGetCityWeather from "@/hooks/useGetCityWeather";
-import { WeatherApiResponse } from "@/hooks/useGetCityByCoordinate";
+import { weatherCodeToDescription } from "@/utils/weatherCodeDescriptions";
+import ErrorDisplay from "@/components/ErrorDisplay";
+import { CityInfosStatusEnum } from "@/type/city.type";
 
 const Index = () => {
-  const searchText = useStore((state) => state.searchText);
-  const isGeoError = useStore((state) => state.isGeoError);
   const cityInfos = useStore((state) => state.cityInfos);
-
-  const [weather, setWeather] = useState<WeatherApiResponse | undefined>(
-    undefined
-  );
-
-  const { fetchCityWeather } = useGetCityWeather();
 
   const {
     name = "",
     admin1 = "",
     country = "",
-    latitude,
-    longitude,
-  } = cityInfos || {};
+    latitude = 0,
+    longitude = 0,
+    timezone = "",
+  } = cityInfos?.data || {};
 
-  const fetchWeather = async () => {
-    if (longitude && latitude) {
-      const res = await fetchCityWeather(longitude, latitude);
-      setWeather(res);
-    }
-  };
+  const { error, data } = useGetCityWeather(longitude, latitude, timezone);
+  const { current } = data || {};
 
-  useEffect(() => {
-    fetchWeather();
-  }, [cityInfos]);
+  if (cityInfos && cityInfos?.status !== CityInfosStatusEnum.SUCCESS) {
+    return <ErrorDisplay errorMessage={cityInfos?.status} />;
+  }
 
-  // useEffect(() => {
-  //   if (longitude && latitude) {
-  //     const res = fetchCityWeather(longitude, latitude);
-  //     console.log("res", res);
-  //   }
-  // }, [longitude, latitude, fetchCityWeather]);
+  const hasErrorAPI = !!error;
+  const hasCityInfos = !!cityInfos;
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      {isGeoError ? (
-        <Text style={{ color: "red" }}>{searchText}</Text>
-      ) : (
+    <View style={styles.container}>
+      <Text>Current</Text>
+      {hasCityInfos && (
         <>
-          <Text>Current</Text>
           <Text>{name}</Text>
           <Text>{admin1}</Text>
           <Text>{country}</Text>
-          <Text>{weather?.hourly?.temperature_2m[0]}</Text>
+          <Text>{latitude}</Text>
+          <Text>{longitude}</Text>
+          {hasErrorAPI ? (
+            <ErrorDisplay errorMessage={CityInfosStatusEnum.API_ERROR} />
+          ) : (
+            <>
+              <Text>{current?.temperature} °C</Text>
+              <Text>{weatherCodeToDescription(current?.weathercode)}</Text>
+              <Text>{current?.windspeed} km/h</Text>
+            </>
+          )}
         </>
       )}
     </View>
@@ -65,3 +54,11 @@ const Index = () => {
 };
 
 export default Index;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

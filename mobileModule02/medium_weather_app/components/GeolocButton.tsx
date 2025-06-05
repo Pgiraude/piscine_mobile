@@ -1,31 +1,41 @@
-import { PERMISSION_DENIED } from "@/constants/geoloc";
 import useGetCityByCoordinate from "@/hooks/useGetCityByCoordinate";
-import useLocation from "@/hooks/useLocation";
+import useGetLocation from "@/hooks/useGetLocation";
 import useStore from "@/store/useStore";
+import { CityInfosStatusEnum } from "@/type/city.type";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useEffect } from "react";
 import { Pressable } from "react-native";
 
 const GeolocButton = () => {
-  const setSearchText = useStore((state) => state.setSearchText);
-  const setIsGeoError = useStore((state) => state.setIsGeoError);
-  const { fetchCityByCoordinate } = useGetCityByCoordinate();
-  const location = useLocation();
+  const setCityInfos = useStore((state) => state.setCityInfos);
+  const { getCityByCoordinate, error: errorCity } = useGetCityByCoordinate();
+  const { getLocation, errorMsg: errorLocation } = useGetLocation();
+
+  useEffect(() => {
+    if (errorCity || errorLocation) {
+      setCityInfos({ data: undefined, status: CityInfosStatusEnum.API_ERROR });
+    }
+  }, [errorCity, errorLocation, setCityInfos]);
 
   const handleGeolocation = async () => {
-    const myLocation = await location.getLocation();
+    const myLocation = await getLocation();
     if (myLocation) {
       const latitude = myLocation?.coords.latitude;
       const longitude = myLocation?.coords.longitude;
-      setIsGeoError(false);
-      const result = await fetchCityByCoordinate(longitude, latitude);
+      const result = await getCityByCoordinate(longitude, latitude);
       if (result) {
-        setSearchText(result.name);
+        setCityInfos({ data: result, status: CityInfosStatusEnum.SUCCESS });
       } else {
-        setSearchText("Not Found");
+        setCityInfos({
+          data: undefined,
+          status: CityInfosStatusEnum.NOT_FOUND,
+        });
       }
     } else {
-      setIsGeoError(true);
-      setSearchText(PERMISSION_DENIED);
+      setCityInfos({
+        data: undefined,
+        status: CityInfosStatusEnum.GEOLOCATION_ERROR,
+      });
     }
   };
 
