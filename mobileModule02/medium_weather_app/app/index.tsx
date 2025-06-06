@@ -9,14 +9,8 @@ import { CityInfosStatusEnum } from "@/type/city.type";
 const Index = () => {
   const cityInfos = useStore((state) => state.cityInfos);
 
-  const {
-    name = "",
-    admin1 = "",
-    country = "",
-    latitude = 0,
-    longitude = 0,
-    timezone = "",
-  } = cityInfos?.data || {};
+  const { name, admin1, country, latitude, longitude, timezone } =
+    cityInfos?.data || {};
 
   const { error, data } = useGetCityWeather(longitude, latitude, timezone);
   const { current } = data || {};
@@ -34,10 +28,10 @@ const Index = () => {
       {hasCityInfos && (
         <>
           <Text>{name}</Text>
-          <Text>{admin1}</Text>
-          <Text>{country}</Text>
-          <Text>{latitude}</Text>
-          <Text>{longitude}</Text>
+          {admin1 && <Text>{admin1}</Text>}
+          {country && <Text>{country}</Text>}
+          {latitude && <Text>latitude: {latitude}</Text>}
+          {longitude && <Text>longitude: {longitude}</Text>}
           {hasErrorAPI ? (
             <ErrorDisplay errorMessage={CityInfosStatusEnum.API_ERROR} />
           ) : (

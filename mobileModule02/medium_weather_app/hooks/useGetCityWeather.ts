@@ -47,9 +47,9 @@ const parseDailyWeather = (res: any): DailyWeather[] => {
 };
 
 const useGetCityWeather = (
-  longitude: number,
-  latitude: number,
-  timezone: string
+  longitude: number | undefined,
+  latitude: number | undefined,
+  timezone: string | undefined
 ) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);

@@ -9,14 +9,8 @@ import { CityInfosStatusEnum } from "@/type/city.type";
 const Weekly = () => {
   const cityInfos = useStore((state) => state.cityInfos);
 
-  const {
-    name = "",
-    admin1 = "",
-    country = "",
-    latitude = 0,
-    longitude = 0,
-    timezone = "",
-  } = cityInfos?.data || {};
+  const { name, admin1, country, latitude, longitude, timezone } =
+    cityInfos?.data || {};
 
   const { error, data } = useGetCityWeather(longitude, latitude, timezone);
   const { daily } = data || {};
@@ -40,8 +34,8 @@ const Weekly = () => {
       {hasCityInfos && (
         <>
           <Text>{name}</Text>
-          <Text>{admin1}</Text>
-          <Text>{country}</Text>
+          {admin1 && <Text>{admin1}</Text>}
+          {country && <Text>{country}</Text>}
           {hasErrorAPI ? (
             <ErrorDisplay errorMessage={CityInfosStatusEnum.API_ERROR} />
           ) : (

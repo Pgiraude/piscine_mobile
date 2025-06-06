@@ -43,7 +43,6 @@ const Dropdown = () => {
     if (results && results.length > 0) {
       setCityInfos({ data: results[0], status: CityInfosStatusEnum.SUCCESS });
     } else {
-      console.log("not found");
       setCityInfos({ data: undefined, status: CityInfosStatusEnum.NOT_FOUND });
     }
     setSearchText("");
