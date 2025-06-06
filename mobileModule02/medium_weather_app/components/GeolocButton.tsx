@@ -15,7 +15,7 @@ const GeolocButton = () => {
     if (errorCity || errorLocation) {
       setCityInfos({ data: undefined, status: CityInfosStatusEnum.API_ERROR });
     }
-  }, [errorCity, errorLocation, setCityInfos]);
+  }, [errorCity, errorLocation]);
 
   const handleGeolocation = async () => {
     const myLocation = await getLocation();

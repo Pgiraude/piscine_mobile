@@ -28,7 +28,6 @@ const useGetLocation = () => {
       setLocation(currentLocation);
       return currentLocation;
     } catch (error) {
-      console.log("error", error);
       setErrorMsg("Erreur lors de l'obtention de la position");
     }
   };

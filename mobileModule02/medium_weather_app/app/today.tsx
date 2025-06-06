@@ -36,9 +36,9 @@ const Today = () => {
         alignItems: "center",
       }}
     >
+      <Text>Today</Text>
       {hasCityInfos && (
         <>
-          <Text>Today</Text>
           <Text>{name}</Text>
           <Text>{admin1}</Text>
           <Text>{country}</Text>

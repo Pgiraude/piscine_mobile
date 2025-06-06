@@ -23,12 +23,16 @@ type WeatherInfos = {
 
 const parseHourlyWeather = (res: any): HourlyWeather[] => {
   const { time, temperature_2m, weathercode, windspeed_10m } = res.hourly;
-  return time.map((t: string, i: number) => ({
-    time: t,
-    temperature: temperature_2m[i],
-    weathercode: weathercode[i],
-    windspeed: windspeed_10m[i],
-  }));
+  const today = new Date().toISOString().split("T")[0];
+
+  return time
+    .map((t: string, i: number) => ({
+      time: t,
+      temperature: temperature_2m[i],
+      weathercode: weathercode[i],
+      windspeed: windspeed_10m[i],
+    }))
+    .filter((weather: HourlyWeather) => weather.time.startsWith(today));
 };
 
 const parseDailyWeather = (res: any): DailyWeather[] => {

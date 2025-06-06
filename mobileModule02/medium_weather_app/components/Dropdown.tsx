@@ -25,7 +25,7 @@ const Dropdown = () => {
     if (error) {
       setCityInfos({ data: undefined, status: CityInfosStatusEnum.API_ERROR });
     }
-  }, [error]);
+  }, [error, setCityInfos]);
 
   const handleChangeText = (text: string) => {
     setSearchText(text);
@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: 999,
+    backgroundColor: "transparent",
   },
   dropdown: {
     position: "absolute",
@@ -115,10 +116,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
-    zIndex: 1000,
+    zIndex: 1001,
     maxHeight: 200,
-    elevation: 5, // ombre sur Android
-    shadowColor: "#000", // ombre sur iOS
+    elevation: 5,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,

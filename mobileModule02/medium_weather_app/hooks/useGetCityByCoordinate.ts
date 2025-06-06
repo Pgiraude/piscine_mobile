@@ -11,7 +11,6 @@ const useGetCityByCoordinate = () => {
     setError(undefined);
     try {
       const res = await fetchCityByCoordinate(longitude, latitude);
-      console.log({ res, longitude, latitude });
       const address = res?.address;
       const cityName =
         address?.city ||
@@ -22,7 +21,6 @@ const useGetCityByCoordinate = () => {
       if (cityName) {
         const city = await fetchCitiesByName(cityName);
         if (Array.isArray(city) && city.length > 0) {
-          console.log(city[0]);
           return city[0];
         }
       }

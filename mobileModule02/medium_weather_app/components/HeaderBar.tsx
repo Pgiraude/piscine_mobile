@@ -6,7 +6,7 @@ import GeolocButton from "./GeolocButton";
 
 const HeaderBar = () => {
   return (
-    <SafeAreaView style={{ backgroundColor: "white" }}>
+    <SafeAreaView style={{ backgroundColor: "white", flex: 0, zIndex: 1000 }}>
       <View
         style={{
           width: "100%",
@@ -17,6 +17,7 @@ const HeaderBar = () => {
           borderBottomWidth: 1,
           borderBottomColor: "#ccc",
           paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+          zIndex: 1000,
         }}
       >
         <Dropdown />
