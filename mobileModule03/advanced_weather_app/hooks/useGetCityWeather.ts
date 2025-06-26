@@ -24,6 +24,9 @@ type WeatherInfos = {
 const parseHourlyWeather = (res: any): HourlyWeather[] => {
   const { time, temperature_2m, weathercode, windspeed_10m } = res.hourly;
   const today = new Date().toISOString().split("T")[0];
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tomorrowStr = tomorrow.toISOString().split("T")[0];
 
   return time
     .map((t: string, i: number) => ({
@@ -32,7 +35,15 @@ const parseHourlyWeather = (res: any): HourlyWeather[] => {
       weathercode: weathercode[i],
       windspeed: windspeed_10m[i],
     }))
-    .filter((weather: HourlyWeather) => weather.time.startsWith(today));
+    .filter((weather: HourlyWeather) => {
+      if (weather.time.startsWith(today)) return true;
+      if (
+        weather.time.startsWith(tomorrowStr) &&
+        weather.time.slice(11, 16) === "00:00"
+      )
+        return true;
+      return false;
+    });
 };
 
 const parseDailyWeather = (res: any): DailyWeather[] => {

@@ -3,11 +3,10 @@ import { useState } from "react";
 import {
   FlatList,
   TextInput,
-  TouchableOpacity,
   View,
   Text,
   StyleSheet,
-  TouchableWithoutFeedback,
+  TouchableOpacity,
 } from "react-native";
 import useGetCities from "@/hooks/useGetCities";
 import useStore from "@/store/useStore";
@@ -37,7 +36,9 @@ const Dropdown = () => {
   const onOptionPress = (option: City) => {
     setCityInfos({ data: option, status: CityInfosStatusEnum.SUCCESS });
     setSearchText("");
-    setShowDropdown(false);
+    setTimeout(() => {
+      setShowDropdown(false);
+    }, 100);
   };
 
   const handleSubmit = () => {
@@ -57,43 +58,42 @@ const Dropdown = () => {
         value={searchText}
         onChangeText={handleChangeText}
         placeholder="Rechercher une ville..."
-        onBlur={() => setShowDropdown(false)}
         onSubmitEditing={handleSubmit}
       />
-      {showDropdown && (
-        <>
-          <TouchableWithoutFeedback onPress={() => setShowDropdown(false)}>
-            <View style={styles.overlay} />
-          </TouchableWithoutFeedback>
-          {results && results.length > 0 && (
-            <View style={styles.dropdown}>
-              <FlatList
-                data={results.slice(0, 5)}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    onPress={() => onOptionPress(item)}
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      gap: 5,
-                      padding: 10,
-                    }}
-                  >
-                    <FontAwesome5 name="city" size={18} color="black" />
-                    <Text style={styles.item}>
-                      <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
-                      {` ${item.admin1}, ${item.country}`}
-                    </Text>
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item) => item.id.toString()}
-                keyboardShouldPersistTaps="handled"
-                showsVerticalScrollIndicator={true}
-              />
-            </View>
-          )}
-        </>
+      {showDropdown && results && results.length > 0 && (
+        <View style={styles.dropdownContainer}>
+          <FlatList
+            data={results.slice(0, 5)}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => onOptionPress(item)}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 5,
+                  padding: 10,
+                  backgroundColor: "transparent",
+                }}
+                activeOpacity={0.7}
+              >
+                <FontAwesome5
+                  name="city"
+                  size={18}
+                  color="rgba(255, 130, 67, 1)"
+                />
+                <View style={styles.item}>
+                  <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
+                  {item.admin1 && <Text>{` ${item.admin1}`}</Text>}
+                  {item.country && <Text>{`, ${item.country}`}</Text>}
+                </View>
+              </TouchableOpacity>
+            )}
+            keyExtractor={(item) => item.id.toString()}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={true}
+          />
+        </View>
       )}
     </View>
   );
@@ -109,20 +109,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: "white",
   },
-  overlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 999,
-    backgroundColor: "transparent",
-  },
-  dropdown: {
-    position: "absolute",
-    top: 45,
-    left: 0,
-    right: 0,
+  dropdownContainer: {
+    marginTop: 10,
     backgroundColor: "white",
     borderWidth: 1,
     borderColor: "#ccc",
@@ -133,11 +121,16 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
+    position: "absolute",
+    width: "100%",
+    top: 40,
   },
   item: {
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
+    display: "flex",
+    flexDirection: "row",
   },
 });
 

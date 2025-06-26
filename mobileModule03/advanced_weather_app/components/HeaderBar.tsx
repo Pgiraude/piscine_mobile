@@ -6,14 +6,16 @@ import GeolocButton from "./GeolocButton";
 
 const HeaderBar = () => {
   return (
-    <SafeAreaView style={{ backgroundColor: "white", flex: 0, zIndex: 1000 }}>
+    <SafeAreaView
+      style={{ flex: 0, zIndex: 1000, backgroundColor: "rgba(42, 32, 56, 1)" }}
+    >
       <View
         style={{
           width: "100%",
           flexDirection: "row",
           padding: 10,
           gap: 10,
-          backgroundColor: "white",
+          backgroundColor: "rgba(42, 32, 56, 1)",
           borderBottomWidth: 1,
           borderBottomColor: "#ccc",
           paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,

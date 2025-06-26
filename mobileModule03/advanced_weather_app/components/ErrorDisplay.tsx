@@ -1,6 +1,7 @@
-// components/ErrorDisplay.tsx
+import customStyles from "@/styles/styles";
+import { FontAwesome6 } from "@expo/vector-icons";
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 
 type ErrorDisplayProps = {
   errorMessage: string;
@@ -8,24 +9,11 @@ type ErrorDisplayProps = {
 
 const ErrorDisplay = ({ errorMessage }: ErrorDisplayProps) => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.message}>{errorMessage}</Text>
+    <View style={customStyles.card}>
+      <FontAwesome6 name="triangle-exclamation" size={50} color="red" />
+      <Text style={customStyles.subtitle}>{errorMessage}</Text>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 24,
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-  },
-  message: {
-    fontSize: 16,
-    color: "red",
-    textAlign: "center",
-  },
-});
 
 export default ErrorDisplay;

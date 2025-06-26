@@ -1,105 +1,125 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { ImageBackground, StyleSheet, View } from "react-native";
+import {
+  ImageBackground,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import HeaderBar from "@/components/HeaderBar";
 
 import Index from "./index";
 import Weekly from "./weekly";
 import Today from "./today";
+import {
+  SceneMap,
+  TabView,
+  Route,
+  NavigationState,
+} from "react-native-tab-view";
 
-const Tab = createMaterialTopTabNavigator();
+const renderScene = SceneMap({
+  index: Index,
+  today: Today,
+  weekly: Weekly,
+});
 
-interface BackgroundWrapperProps {
-  children: ReactNode;
-}
+const getRouteIcon = (key: string, focused: boolean) => {
+  const color = focused ? "black" : "gray";
+  switch (key) {
+    case "index":
+      return (
+        <MaterialCommunityIcons name="weather-cloudy" size={24} color={color} />
+      );
+    case "today":
+      return <MaterialIcons name="today" size={24} color={color} />;
+    case "weekly":
+      return (
+        <MaterialCommunityIcons name="calendar-week" size={24} color={color} />
+      );
+    default:
+      return null;
+  }
+};
 
-const BackgroundWrapper = ({ children }: BackgroundWrapperProps) => (
-  <ImageBackground
-    source={require("@/assets/images/sunset.png")}
-    style={styles.background}
-    resizeMode="cover"
+const CustomTabBar = ({
+  navigationState,
+  jumpTo,
+}: {
+  navigationState: NavigationState<Route>;
+  jumpTo: (key: string) => void;
+}) => (
+  <View
+    style={{
+      flexDirection: "row",
+      backgroundColor: "rgba(255,255,255,1)",
+      justifyContent: "space-around",
+      alignItems: "center",
+      height: 56,
+      position: "absolute",
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: 10,
+    }}
   >
-    {children}
-  </ImageBackground>
+    {navigationState.routes.map((route, idx) => {
+      const focused = navigationState.index === idx;
+      return (
+        <TouchableOpacity
+          key={route.key}
+          onPress={() => jumpTo(route.key)}
+          style={{ alignItems: "center", flex: 1 }}
+        >
+          {getRouteIcon(route.key, focused)}
+          <Text style={{ fontSize: 12, color: focused ? "black" : "gray" }}>
+            {route.title}
+          </Text>
+        </TouchableOpacity>
+      );
+    })}
+  </View>
 );
 
 export default function RootLayout() {
+  const layout = useWindowDimensions();
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: "index", title: "Currently" },
+    { key: "today", title: "Today" },
+    { key: "weekly", title: "Weekly" },
+  ]);
+
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={require("@/assets/images/sun-down.png")}
+      style={styles.background}
+      resizeMode="cover"
+    >
       <HeaderBar />
-      <Tab.Navigator
-        tabBarPosition="bottom"
-        screenOptions={{
-          tabBarStyle: styles.tabBar,
-        }}
-      >
-        <Tab.Screen
-          component={(props: any) => (
-            <BackgroundWrapper>
-              <Index {...props} />
-            </BackgroundWrapper>
-          )}
-          name="index"
-          options={{
-            title: "Currently",
-            tabBarIcon: () => (
-              <MaterialCommunityIcons
-                name="weather-cloudy"
-                size={24}
-                color="black"
-              />
-            ),
-          }}
+      <View style={{ flex: 1 }}>
+        <TabView
+          navigationState={{ index, routes }}
+          renderScene={renderScene}
+          onIndexChange={setIndex}
+          initialLayout={{ width: layout.width }}
+          renderTabBar={(props) => <CustomTabBar {...props} />}
         />
-        <Tab.Screen
-          component={(props: any) => (
-            <BackgroundWrapper>
-              <Today {...props} />
-            </BackgroundWrapper>
-          )}
-          name="today"
-          options={{
-            title: "Today",
-            tabBarIcon: () => (
-              <MaterialIcons name="today" size={24} color="black" />
-            ),
-          }}
-        />
-        <Tab.Screen
-          component={(props: any) => (
-            <BackgroundWrapper>
-              <Weekly {...props} />
-            </BackgroundWrapper>
-          )}
-          name="weekly"
-          options={{
-            title: "Weekly",
-            tabBarIcon: () => (
-              <MaterialCommunityIcons
-                name="calendar-week"
-                size={24}
-                color="black"
-              />
-            ),
-          }}
-        />
-      </Tab.Navigator>
-    </View>
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   background: {
     flex: 1,
     width: "100%",
     height: "100%",
   },
   tabBar: {
-    backgroundColor: "rgba(255, 255, 255, 0.6)",
+    backgroundColor: "transparent",
   },
 });

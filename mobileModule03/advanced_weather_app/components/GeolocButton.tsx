@@ -45,7 +45,7 @@ const GeolocButton = () => {
       style={{
         width: 40,
         height: 40,
-        backgroundColor: "#007AFF",
+        backgroundColor: "rgba(255, 130, 67, 1)",
         borderRadius: 5,
         justifyContent: "center",
         alignItems: "center",
