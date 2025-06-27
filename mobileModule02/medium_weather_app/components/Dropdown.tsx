@@ -42,6 +42,8 @@ const Dropdown = () => {
   const handleSubmit = () => {
     if (results && results.length > 0) {
       setCityInfos({ data: results[0], status: CityInfosStatusEnum.SUCCESS });
+    } else if (error) {
+      setCityInfos({ data: undefined, status: CityInfosStatusEnum.API_ERROR });
     } else {
       setCityInfos({ data: undefined, status: CityInfosStatusEnum.NOT_FOUND });
     }

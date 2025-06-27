@@ -91,12 +91,15 @@ const customStyles = StyleSheet.create({
     fontWeight: "bold",
     color: "rgba(255, 154, 80, 1)",
     textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
   },
   subtitle: {
     fontSize: 30,
     color: "rgba(160, 160, 192, 1)",
     textAlign: "center",
-    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

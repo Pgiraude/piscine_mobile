@@ -21,7 +21,7 @@ const WeatherChart = (props: WeatherChartProps) => {
   const { data, data2, color1, color2, legend1, legend2 } = props;
   const { width } = useWindowDimensions();
 
-  const chartWidth = Math.max(width, (data?.length ?? 0) * 70) - 100;
+  const chartWidth = width - 100;
 
   return (
     <View style={customStyles.card}>

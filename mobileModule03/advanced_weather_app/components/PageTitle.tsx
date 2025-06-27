@@ -15,7 +15,8 @@ const PageTitle = ({ city, region, country }: PageTitleProps) => {
       style={{
         alignItems: "center",
         justifyContent: "center",
-        flexWrap: "wrap",
+        flexDirection: "column",
+        display: "flex",
       }}
     >
       <Text style={customStyles.title}>{title}</Text>
