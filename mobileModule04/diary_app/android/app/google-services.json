@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "987384037764",
+    "project_id": "diary-app-pgiraude",
+    "storage_bucket": "diary-app-pgiraude.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:987384037764:android:a7c0c3242db7854f08ddd1",
+        "android_client_info": {
+          "package_name": "diary.piscine.app42"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "987384037764-r5gv4f4bu66voaqet6ml3ct1cjjh7nvi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQFEtvphXBFrhPB1TOKb24ABxlPLKzDkg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "987384037764-r5gv4f4bu66voaqet6ml3ct1cjjh7nvi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "987384037764-900umrcc55elmnmh9n9r4dsosjpgroac.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "diary.piscine.app42"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

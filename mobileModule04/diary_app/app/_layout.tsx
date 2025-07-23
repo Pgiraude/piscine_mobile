@@ -1,6 +1,5 @@
 import { Slot } from "expo-router";
 import { ImageBackground } from "react-native";
-import { Pressable, Text, View } from "react-native";
 
 export default function RootLayout() {
   return (

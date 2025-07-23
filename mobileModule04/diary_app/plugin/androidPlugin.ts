@@ -1,10 +1,10 @@
-import { ConfigPlugin, withAndroidManifest } from "expo/config-plugins";
+const { withAndroidManifest } = require("expo/config-plugins");
 
-const withAndroidPlugin: ConfigPlugin = (config) => {
+const androidPlugin = (config: any) => {
   // Define a custom message
   const message = "Hello world, from Expo plugin!";
 
-  return withAndroidManifest(config, (config) => {
+  return withAndroidManifest(config, (config: any) => {
     const mainApplication = config?.modResults?.manifest?.application?.[0];
 
     if (mainApplication) {
@@ -26,4 +26,4 @@ const withAndroidPlugin: ConfigPlugin = (config) => {
   });
 };
 
-export default withAndroidPlugin;
+module.exports = androidPlugin;
