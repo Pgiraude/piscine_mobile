@@ -50,6 +50,7 @@ const AddOrEditNoteModal = ({
 				content,
 				satisfaction,
 				date: addDate ?? new Date(),
+				createdAt: new Date(),
 			};
 			await FirestoreService.addNote(userId, noteData);
 		}

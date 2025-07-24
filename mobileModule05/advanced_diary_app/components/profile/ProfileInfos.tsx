@@ -1,3 +1,4 @@
+import { colors } from "@/design-system/Colors";
 import LButton, { LButtonVariant } from "@/design-system/LButton";
 import type { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { Image, Text, View } from "react-native";
@@ -14,7 +15,7 @@ const MyProfile = ({ user, logout }: MyProfileProps) => {
 			style={{
 				gap: 10,
 				borderRadius: 10,
-				backgroundColor: "#e6fff7",
+				backgroundColor: colors.lightGreen,
 				padding: 20,
 				width: "100%",
 			}}

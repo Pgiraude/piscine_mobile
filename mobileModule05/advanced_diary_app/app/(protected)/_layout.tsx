@@ -1,4 +1,4 @@
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { colors } from "@/design-system/Colors";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useState } from "react";
 import {
@@ -35,15 +35,15 @@ export default function ProtectedLayout() {
 					<FontAwesome5
 						name="user-alt"
 						size={24}
-						color={focused ? "darkblue" : "grey"}
+						color={focused ? "white" : colors.darkBlue}
 					/>
 				);
 			case "agenda":
 				return (
-					<AntDesign
-						name="calendar"
+					<FontAwesome5
+						name="calendar-day"
 						size={24}
-						color={focused ? "darkblue" : "grey"}
+						color={focused ? "white" : colors.darkBlue}
 					/>
 				);
 		}
@@ -53,11 +53,12 @@ export default function ProtectedLayout() {
 		<TabBar
 			{...props}
 			indicatorStyle={{ backgroundColor: "white" }}
-			style={{ backgroundColor: "#A084E8", height: 75 }}
+			style={{ backgroundColor: colors.primary }}
 		/>
 	);
 
 	return (
+		// <SafeAreaView style={{ flex: 1 }}>
 		<TabView
 			navigationState={{ index, routes }}
 			renderScene={renderScene}
@@ -67,10 +68,11 @@ export default function ProtectedLayout() {
 			commonOptions={{
 				icon: renderIcon,
 				labelStyle: {
-					color: "darkblue",
+					color: "white",
 					fontSize: 15,
 				},
 			}}
 		/>
+		// </SafeAreaView>
 	);
 }

@@ -1,11 +1,12 @@
 import type { Note } from "@/db/firestore";
+import { colors } from "@/design-system/Colors";
 import type { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import AddOrEditNoteModal from "../notes/AddOrEditNoteModal";
-import DeleteNoteModal from "../notes/DeleteNoteModal";
-import NoteCard from "../notes/NoteCard";
-import NoteDetailModal from "../notes/NoteDetailModal";
+import AddOrEditNoteModal from "./AddOrEditNoteModal";
+import DeleteNoteModal from "./DeleteNoteModal";
+import NoteCard from "./NoteCard";
+import NoteDetailModal from "./NoteDetailModal";
 
 type NoteHistoryProps = {
 	notes: Note[];
@@ -82,7 +83,7 @@ const NoteHistory = ({ notes, user }: NoteHistoryProps) => {
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: "rgba(46, 6, 116, 0.66)",
+		backgroundColor: colors.nightBlue,
 		borderRadius: 10,
 		padding: 20,
 	},

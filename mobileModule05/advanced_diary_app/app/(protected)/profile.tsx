@@ -1,6 +1,6 @@
-import MyProfile from "@/components/MyProfil";
 import AddOrEditNoteModal from "@/components/notes/AddOrEditNoteModal";
-import NoteHistory from "@/components/profile/NoteHistory";
+import NoteHistory from "@/components/notes/NoteHistory";
+import MyProfile from "@/components/profile/ProfileInfos";
 import ProfileKpi from "@/components/profile/ProfileKpi";
 import { useAuth } from "@/context/AuthContext";
 import { FirestoreService, type Note } from "@/db/firestore";
@@ -30,10 +30,12 @@ const Profile = () => {
 	};
 
 	useEffect(() => {
-		const unsubscribe = FirestoreService.realtimeUserNotes(
+		const unsubscribe = FirestoreService.getUserNotes(
 			user?.uid || "",
 			(data) => {
-				setNotes(data.sort((a, b) => b.date.getTime() - a.date.getTime()));
+				setNotes(
+					data.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()),
+				);
 			},
 		);
 		return unsubscribe;
@@ -73,6 +75,7 @@ const Profile = () => {
 			<NoteHistory notes={notes} user={user} />
 			<ProfileKpi notes={notes} />
 			<LButton
+				style={{ width: "100%" }}
 				variant={LButtonVariant.EDIT}
 				onPress={() => setIsOpenAddOrEditModal(true)}
 			>

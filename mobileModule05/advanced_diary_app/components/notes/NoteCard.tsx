@@ -1,4 +1,5 @@
 import { type Note, SatisfactionLabels } from "@/db/firestore";
+import { colors } from "@/design-system/Colors";
 import LButton, { LButtonVariant } from "@/design-system/LButton";
 import { Dimensions, Pressable, Text, View } from "react-native";
 
@@ -19,7 +20,7 @@ const NoteCard = ({ note, onPress, onEdit, onDelete }: NoteCardProps) => (
 			flexDirection: "row",
 			padding: 10,
 			borderRadius: 10,
-			backgroundColor: "#e6fff7",
+			backgroundColor: colors.lightGreen,
 			width: "100%",
 			alignSelf: "stretch",
 			justifyContent: "space-between",

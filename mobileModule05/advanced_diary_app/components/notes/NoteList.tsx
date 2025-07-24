@@ -1,4 +1,5 @@
 import type { Note } from "@/db/firestore";
+import { colors } from "@/design-system/Colors";
 import type { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
@@ -10,10 +11,9 @@ import NoteDetailModal from "./NoteDetailModal";
 type NoteListProps = {
 	user: FirebaseAuthTypes.User;
 	notes: Note[];
-	addDate?: Date;
 };
 
-const NoteList = ({ user, notes, addDate }: NoteListProps) => {
+const NoteList = ({ user, notes }: NoteListProps) => {
 	const [selectedNote, setSelectedNote] = useState<Note | undefined>(undefined);
 	const [isOpenDeleteModal, setisOpenDeleteModal] = useState(false);
 	const [isOpenAddOrEditModal, setisOpenAddOrEditModal] = useState(false);
@@ -84,7 +84,7 @@ const noteListStyles = StyleSheet.create({
 		flexDirection: "row",
 		padding: 10,
 		borderRadius: 10,
-		backgroundColor: "#e6fff7",
+		backgroundColor: colors.lightGreen,
 		width: "100%",
 		alignSelf: "stretch",
 		justifyContent: "space-between",

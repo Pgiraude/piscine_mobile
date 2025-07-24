@@ -4,7 +4,6 @@ import {
 	collection,
 	deleteDoc,
 	doc,
-	getDocs,
 	getFirestore,
 	onSnapshot,
 	updateDoc,
@@ -26,24 +25,13 @@ export type Note = {
 	id: string;
 	email: string;
 	date: Date;
+	createdAt: Date;
 	content: string;
 	title: string;
 	satisfaction: SatisfactionEnum;
 };
 
 export const FirestoreService = {
-	async getUserNotes(userId: string): Promise<Note[]> {
-		const userData = getFirestore(getApp());
-		const ref = collection(userData, "users", userId, "notes");
-		const querySnapshot = await getDocs(ref);
-
-		return querySnapshot.docs.map((doc: any) => ({
-			id: doc.id,
-			...doc.data(),
-			date: new Date(doc.data().date._seconds * 1000),
-		}));
-	},
-
 	async addNote(userId: string, note: Omit<Note, "id">) {
 		const userData = getFirestore(getApp());
 		const ref = collection(userData, "users", userId, "notes");
@@ -68,7 +56,7 @@ export const FirestoreService = {
 		await updateDoc(ref, note);
 	},
 
-	realtimeUserNotes: (userId: string, callback: (notes: Note[]) => void) => {
+	getUserNotes: (userId: string, callback: (notes: Note[]) => void) => {
 		const userData = getFirestore(getApp());
 		const ref = collection(userData, "users", userId, "notes");
 		const unsubscribe = onSnapshot(ref, (querySnapshot) => {
@@ -76,6 +64,7 @@ export const FirestoreService = {
 				id: doc.id,
 				...doc.data(),
 				date: new Date(doc.data().date._seconds * 1000),
+				createdAt: new Date(doc.data().createdAt._seconds * 1000),
 			}));
 			callback(notes);
 		});
