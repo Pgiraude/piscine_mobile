@@ -16,8 +16,9 @@ const Agenda = () => {
 	const [isOpenAddModal, setIsOpenAddModal] = useState(false);
 
 	useEffect(() => {
+		if (!user) return;
 		const unsubscribe = FirestoreService.getUserNotes(
-			user?.uid || "",
+			user.uid,
 			(data) => {
 				setNotes(
 					data.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()),
@@ -25,7 +26,7 @@ const Agenda = () => {
 			},
 		);
 		return unsubscribe;
-	}, [user?.uid]);
+	}, [user]);
 
 	const selectedNotes = notes.filter(
 		(note) => format(note.date, FORMAT_DATE) === selected,

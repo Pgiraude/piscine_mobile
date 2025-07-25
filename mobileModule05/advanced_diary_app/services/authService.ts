@@ -18,7 +18,7 @@ GoogleSignin.configure({
 const RESULT_SUCCESS = "success";
 
 export const AuthService = {
-	async signInWithGoogle(): Promise<FirebaseAuthTypes.UserCredential> {
+	async signInWithGoogle(): Promise<FirebaseAuthTypes.UserCredential | undefined> {
 		try {
 			await GoogleSignin.hasPlayServices();
 
@@ -26,7 +26,8 @@ export const AuthService = {
 
 			const idToken = signInResult.data?.idToken;
 			if (!idToken) {
-				throw new Error("No google ID token found");
+				console.log("Connexion Google annulée par l'utilisateur.");
+				return undefined;
 			}
 			const googleCredential = GoogleAuthProvider.credential(idToken);
 
@@ -62,7 +63,7 @@ export const AuthService = {
 		return data.access_token;
 	},
 
-	async signInWithGithub(): Promise<FirebaseAuthTypes.UserCredential> {
+	async signInWithGithub(): Promise<FirebaseAuthTypes.UserCredential | undefined> {
 		try {
 			const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.EXPO_PUBLIC_GITHUB_CLIENT_ID}&scope=user:email&redirect_uri=diaryapp://`;
 
@@ -83,7 +84,8 @@ export const AuthService = {
 				}
 			}
 
-			throw new Error("Authentification GitHub annulée");
+			console.log("Connexion GitHub annulée par l'utilisateur.");
+			return undefined;
 		} catch (error) {
 			console.error("Erreur de connexion GitHub:", error);
 			throw error;

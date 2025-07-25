@@ -1,6 +1,7 @@
 import { colors } from "@/design-system/Colors";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useState } from "react";
+import { SafeAreaView } from "react-native";
 import {
 	SceneMap,
 	TabBar,
@@ -27,6 +28,8 @@ export default function ProtectedLayout() {
 		route,
 	}: {
 		focused: boolean;
+
+		
 		route: { key: string };
 	}) => {
 		switch (route.key) {
@@ -35,7 +38,7 @@ export default function ProtectedLayout() {
 					<FontAwesome5
 						name="user-alt"
 						size={24}
-						color={focused ? "white" : colors.darkBlue}
+						color={focused ? "white" : "black"}
 					/>
 				);
 			case "agenda":
@@ -43,7 +46,7 @@ export default function ProtectedLayout() {
 					<FontAwesome5
 						name="calendar-day"
 						size={24}
-						color={focused ? "white" : colors.darkBlue}
+						color={focused ? "white" : "black"}
 					/>
 				);
 		}
@@ -58,21 +61,21 @@ export default function ProtectedLayout() {
 	);
 
 	return (
-		// <SafeAreaView style={{ flex: 1 }}>
-		<TabView
-			navigationState={{ index, routes }}
-			renderScene={renderScene}
-			onIndexChange={(i) => setIndex(i)}
-			tabBarPosition="bottom"
-			renderTabBar={renderTabBar}
-			commonOptions={{
-				icon: renderIcon,
-				labelStyle: {
-					color: "white",
-					fontSize: 15,
-				},
-			}}
-		/>
-		// </SafeAreaView>
+		<SafeAreaView style={{ flex: 1 }}>
+			<TabView
+				navigationState={{ index, routes }}
+				renderScene={renderScene}
+				onIndexChange={(i) => setIndex(i)}
+				tabBarPosition="bottom"
+				renderTabBar={renderTabBar}
+				commonOptions={{
+					icon: renderIcon,
+					labelStyle: {
+						color: "white",
+						fontSize: 15,
+					},
+				}}
+			/>
+		</SafeAreaView>
 	);
 }

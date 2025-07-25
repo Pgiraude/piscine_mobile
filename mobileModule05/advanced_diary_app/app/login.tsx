@@ -13,9 +13,9 @@ const Login = () => {
 			setLoadingProvider("google");
 			setLoading(true);
 
-			await AuthService.signInWithGoogle();
+			const result = await AuthService.signInWithGoogle();
 			console.log("Connexion Google réussie");
-			router.replace("/profile");
+			result && router.replace("/profile");
 		} catch (error) {
 			console.error("Erreur de connexion Google:", error);
 			Alert.alert(
@@ -33,9 +33,9 @@ const Login = () => {
 			setLoadingProvider("github");
 			setLoading(true);
 
-			await AuthService.signInWithGithub();
+			const result = await AuthService.signInWithGithub();
 			console.log("Connexion GitHub réussie");
-			router.replace("/profile");
+			result && router.replace("/profile");
 		} catch (error) {
 			console.error("Erreur de connexion GitHub:", error);
 			Alert.alert(

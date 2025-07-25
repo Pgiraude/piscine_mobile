@@ -22,7 +22,7 @@ const Home = () => {
 			{user ? (
 				<LButton
 					variant={LButtonVariant.GOOGLE}
-					style={{ width: 200, marginTop: 20 }}
+					style={{ width: 200, marginTop: 20, alignItems: "center", justifyContent: "center" }}
 					onPress={() => {
 						router.replace("/profile");
 					}}

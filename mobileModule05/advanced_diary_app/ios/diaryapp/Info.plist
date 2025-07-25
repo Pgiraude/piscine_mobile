@@ -37,6 +37,12 @@
           <string>com.googleusercontent.apps.987384037764-900umrcc55elmnmh9n9r4dsosjpgroac</string>
         </array>
       </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>exp+diaryapp</string>
+        </array>
+      </dict>
     </array>
     <key>CFBundleVersion</key>
     <string>1</string>

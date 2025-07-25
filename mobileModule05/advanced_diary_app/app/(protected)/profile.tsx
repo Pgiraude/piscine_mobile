@@ -5,7 +5,6 @@ import ProfileKpi from "@/components/profile/ProfileKpi";
 import { useAuth } from "@/context/AuthContext";
 import { FirestoreService, type Note } from "@/db/firestore";
 import LButton, { LButtonVariant } from "@/design-system/LButton";
-import { AuthService } from "@/services/authService";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -17,21 +16,16 @@ const Profile = () => {
 
 	const handleLogout = async () => {
 		try {
-			console.log("Starting logout process...");
-			await AuthService.signOut();
-			console.log("AuthService.signOut completed");
-
-			if (logout) {
-				logout();
-			}
+			if (logout) logout();
 		} catch (error) {
 			console.error("Erreur de déconnexion:", error);
 		}
 	};
 
 	useEffect(() => {
+		if (!user) return;
 		const unsubscribe = FirestoreService.getUserNotes(
-			user?.uid || "",
+			user.uid,
 			(data) => {
 				setNotes(
 					data.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()),
@@ -39,7 +33,7 @@ const Profile = () => {
 			},
 		);
 		return unsubscribe;
-	}, [user?.uid]);
+	}, [user]);
 
 	if (!user) {
 		return (

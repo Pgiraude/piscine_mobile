@@ -1,3 +1,4 @@
+import { AuthService } from "@/services/authService";
 import {
 	type FirebaseAuthTypes,
 	getAuth,
@@ -30,13 +31,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
 				"Auth state changed:",
 				user ? "User logged in" : "User logged out",
 			);
-			setUser(user);
+			if (user) setUser(user);
+			else setUser(null);
 			if (initializing) setInitializing(false);
 		};
 
 		const subscriber = onAuthStateChanged(getAuth(), handleAuthStateChanged);
 		return subscriber;
 	}, [initializing]);
+
+	
+	const login = (userInfos: FirebaseAuthTypes.User | null) => {
+		console.log("Manual login called");
+		setUser(userInfos);
+	};
+	
+	const logout = async () => {
+		console.log("Manual logout called ");
+		console.log("Starting logout process...");
+		await AuthService.signOut();
+		console.log("AuthService.signOut completed");
+	};
 
 	useEffect(() => {
 		if (initializing) {
@@ -46,7 +61,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
 		const inAuthGroup =
 			segments[0] === "profile" || segments[0] === "(protected)";
-		console.log("Navigation check:", { user: !!user, inAuthGroup, segments });
 
 		if (user && !inAuthGroup) {
 			console.log("Redirecting to protected area");
@@ -55,17 +69,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 			console.log("Redirecting to login");
 			router.replace("/");
 		}
-	}, [user, initializing, segments]);
-
-	const login = (userInfos: FirebaseAuthTypes.User | null) => {
-		console.log("Manual login called");
-		setUser(userInfos);
-	};
-
-	const logout = () => {
-		console.log("Manual logout called");
-		setUser(null);
-	};
+	}, [user, initializing, segments, logout]);
 
 	return (
 		<AuthContext.Provider value={{ user, login, logout, initializing }}>
